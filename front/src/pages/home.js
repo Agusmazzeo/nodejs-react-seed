@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 import history from "../utils/history";
 
-class PageHome extends Component {
+class Home extends Component {
   gotoUsers() {
     history.push("/users");
   }
@@ -32,4 +32,4 @@ class PageHome extends Component {
   }
 }
 
-export default PageHome;
+export default Home;
