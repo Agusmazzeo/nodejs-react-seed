@@ -1,9 +1,10 @@
-const { UserModel } = require("../db/dbConfig");
+const { UserModel } = require("../schemas/user-schema");
 
 exports.checkExistingUsername = async (username, userEmail) => {
-  const existsUser = await UserModel.find({ user_name: username });
+  const existsUser = await UserModel.find({ name: username });
   const existsEmail = await UserModel.find({ email: userEmail });
-  return existsUser.length || existsEmail.length;
+  // console.log(username);
+  return existsUser.length || existsEmail.length ? existsUser[0] : null;
 };
 
 exports.checkUserExistsById = async (req, res, next) => {
@@ -29,6 +30,18 @@ exports.checkUserExistsById = async (req, res, next) => {
   }
 };
 
+exports.createUser = async (username, userEmail, userAge) => {
+  let user = new UserModel({
+    name: username,
+    email: userEmail,
+    age: userAge,
+  });
+  user = await user.save().catch(e => {
+    return e;
+  });
+  return user;
+};
+
 exports.checkUserIsOwnerById = async (req, res, next) => {
   if (!req.headers.authorization) {
     return res.status(401).json({
@@ -50,4 +63,18 @@ exports.checkUserIsOwnerById = async (req, res, next) => {
       });
     }
   }
+};
+
+exports.getUserById = async userId => {
+  user = await UserModel.find({ _id: userId }).catch(e => {
+    return e;
+  });
+  return user;
+};
+
+exports.getAllUsers = async () => {
+  users = await UserModel.find().catch(e => {
+    return e;
+  });
+  return users;
 };

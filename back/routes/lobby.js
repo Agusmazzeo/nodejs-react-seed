@@ -7,11 +7,17 @@ const { logOutLobby } = require("../src/lobby-functions");
 /*===================================================================*/
 
 router.post("/", async (req, res) => {
-  res.send(await logInLobby(req, res));
+  const userData = {
+    name: req.body.name,
+    email: req.body.email,
+    age: req.body.age,
+  };
+  res.send(await logInLobby(userData));
 });
 
-router.post("/log_out", async (req, res) => {
-  res.send(await logOutLobby(req, res));
+router.delete("/log_out", async (req, res) => {
+  const userId = req.headers.authorization;
+  res.send(await logOutLobby(userId));
 });
 
 /*==================================================================*/

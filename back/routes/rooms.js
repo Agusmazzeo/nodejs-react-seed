@@ -9,26 +9,27 @@ const { checkUserIsOwnerById } = require("../src/user-functions");
 const { signInRoom } = require("../src/room-functions");
 const { deleteRoom } = require("../src/room-functions");
 
-router.get("/", async (req, res) => {
+router.get("/", async (req,res) => {
   const rooms = await getAllRooms();
   res.send(rooms);
 });
 router.get("/:roomId", async (req, res) => {
-  const room = await getOneRoom(req, res);
+  const room = await getOneRoom(req.params.id);
   res.send(room);
 });
 
 router.post("/", checkUserExistsById, async (req, res) => {
-  const createdRoom = await createRoom(req, res);
+  const createdRoom = await createRoom(req.body.room_name, req.headers.authorization);
   res.send(createdRoom);
 });
 
 router.post("/sign_in/:room_id", checkUserExistsById, async (req, res) => {
-  const signedInRoom = await signInRoom(req, res);
+  const signedInRoom = await signInRoom(req.params.room_id, req.headers.authorization);
   res.send(signedInRoom);
 });
+
 router.post("/delete/:room_id", checkUserIsOwnerById, async (req, res) => {
-  const deletedRoom = await deleteRoom(req, res);
+  const deletedRoom = await deleteRoom(req.headers.authorization, req.params.room_id);
   res.send(deletedRoom);
 });
 

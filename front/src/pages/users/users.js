@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 
-import history from "../utils/history";
+import history from "../../utils/history";
 
-class PageUsers extends Component {
+class Users extends Component {
   gotoBack() {
-    history.push("/");
+    history.push("/home");
   }
 
   render() {
@@ -19,4 +19,4 @@ class PageUsers extends Component {
   }
 }
 
-export default PageUsers;
+export default Users;

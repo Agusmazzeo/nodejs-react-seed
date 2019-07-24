@@ -1,38 +1,60 @@
 import React, { Component } from "react";
 import Login from "./pages/login/login";
-import Home from "./pages/home";
+import Home from "./pages/home/home";
+import Rooms from "./pages/rooms/rooms";
+import Users from "./pages/users/users";
 import { Router, Route, Switch } from "react-router-dom";
 
 import history from "./utils/history";
-
-import PageUsers from "./pages/users";
-import PagePosts from "./pages/posts";
 
 // Main app
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      paginaActual: "Login",
-      paginaPrevia: "",
+      user: {
+        name: "",
+        email: "",
+        age: "",
+        _id: "",
+      },
     };
   }
 
-  goToPage(paginaActual) {
+  handleLoginInputChange = event => {
+    let user = { ...this.state.user };
+    let name = event.target.name;
+    let value = event.target.value;
+    user[name] = value;
     this.setState({
-      paginaPrevia: this.state.paginaActual,
-      paginaActual: paginaActual,
+      user,
     });
-    history.push("/home");
-  }
+  };
+
+  updateUserWhenLoggedIn = user => {
+    this.setState({ user });
+  };
 
   render() {
     return (
-      <React.Fragment goToPage>
+      <React.Fragment>
         <Router history={history}>
           <Switch>
-            <Route exact path="/" component={Login} />
-            <Route exact path="/home" component={Home} />
+            <Route
+              exact
+              path="/"
+              render={routeProps => (
+                <Login
+                  {...routeProps}
+                  handleChange={this.handleLoginInputChange}
+                  updateUser={this.updateUserWhenLoggedIn}
+                  user={this.state.user}
+                />
+              )}
+            />
+            <Route exact path="/home" render={routeProps => <Home {...routeProps} user={this.state.user} />} />
+            <Route exact path="/rooms" component={Rooms} />
+            <Route exact path="/users" component={Users} />
           </Switch>
         </Router>
       </React.Fragment>

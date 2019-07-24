@@ -1,35 +1,30 @@
 import React from "react";
 import Logo from "./components/logo/logo";
+import axios from "axios";
 
 class Login extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      isVisible: true,
-      username: "",
-      password: "",
-    };
-    this.handleChangeUsername = this.handleChangeUsername.bind(this);
-    this.handleChangePassword = this.handleChangePassword.bind(this);
+
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleSubmit(event) {
+  async handleSubmit(event) {
     event.preventDefault();
-    console.log(this.state);
-    this.props.goToPage.bind('Home');
-  }
-
-  handleChangeUsername(event) {
-    this.setState({
-      username: event.target.value,
-    });
-  }
-
-  handleChangePassword(event) {
-    this.setState({
-      password: event.target.value,
-    });
+    /*Consulta a back para verificar usuario*/
+    await axios
+      .post(`http://localhost:3000/api/lobby/`, this.props.user)
+      .then(res => {
+        if (!res.data.error) {
+          const user ={...this.props.user};
+          user._id = res.data;
+          this.props.updateUser(user);
+          this.props.history.push("/home");
+        }
+      })
+      .catch(e => {
+        console.log(e);
+      });
   }
 
   render() {
@@ -40,20 +35,31 @@ class Login extends React.Component {
           <input
             className="Input"
             type="text"
-            name="username"
-            placeholder="username"
-            value={this.state.username}
-            onChange={this.handleChangeUsername}
+            name="name"
+            placeholder="Username"
+            value={this.props.user.name}
+            onChange={this.props.handleChange}
             autoComplete="off"
             required
           />
           <input
             className="Input"
-            type="password"
-            name="password"
-            placeholder="password"
-            value={this.state.password}
-            onChange={this.handleChangePassword}
+            type="text"
+            name="email"
+            placeholder="Email"
+            value={this.props.user.email}
+            onChange={this.props.handleChange}
+            autoComplete="off"
+            required
+          />
+          <input
+            className="Input"
+            type="number"
+            name="age"
+            placeholder="Age"
+            value={this.props.user.age}
+            onChange={this.props.handleChange}
+            autoComplete="off"
             required
           />
           <button className="form button" type="submit">

@@ -1,15 +1,17 @@
-const { RoomModel } = require("../db/dbConfig");
+const { RoomModel } = require("../schemas/room-schema");
 
-exports.getAllRooms = async (req, res) => {
-  return (roomTemplate = await RoomModel.find({}).catch(e => {
-    console.log(e);
-  }));
+exports.getAllRooms = async () => {
+  rooms = await RoomModel.find().catch(e => {
+    return e;
+  });
+  return rooms;
 };
 
-exports.getOneRoom = async (req, res) => {
-  return (roomTemplate = await RoomModel.find({ _id: req.params.id }).catch(e => {
-    console.log(e);
-  }));
+exports.getOneRoom = async roomId => {
+  roomTemplate = await RoomModel.find({ _id: roomId }).catch(e => {
+    return e;
+  });
+  return roomTemplate;
 };
 
 checkRoomExistsByName = async roomName => {
@@ -24,19 +26,20 @@ checkRoomExistsByName = async roomName => {
   }
 };
 
-exports.createRoom = async (req, res) => {
+exports.createRoom = async (roomName, ownerId) => {
   let templateRoom = new RoomModel({
-    name: req.body.room_name,
-    owner_id: req.headers.authorization,
+    name: roomName,
+    owner_id: ownerId,
   });
 
   if (await checkRoomExistsByName(templateRoom.name)) {
-    res.status(400).send({
+    return {
+      error: 400,
       message: "This room name already exists.",
-    });
+    };
   } else {
     templateRoom = await templateRoom.save().catch(e => {
-      res.send(e);
+      return e;
     });
 
     return templateRoom;
@@ -54,26 +57,20 @@ checkUserIsSignedInRoom = async (user_id, room_id) => {
   }
 };
 
-exports.deleteRoom = async (req, res) => {
-  if (checkUserIsSignedInRoom(req.headers.authorization, req.params.room_id)) {
+exports.deleteRoom = async (roomId, userId) => {
+  if (checkUserIsSignedInRoom(userId, roomId)) {
     return { delete_message: "A room can't be deleted with users signed in" };
   } else {
-    const deletedMessage = await RoomModel.deleteOne({ _id: req.params.room_id }).catch(e => {
-      console.log(e);
+    const deletedMessage = await RoomModel.deleteOne({ _id: roomId }).catch(e => {
+      return e;
     });
-    console.log(deletedMessage);
-    return deletedMessage.n
-      ? { deleted_room_id: req.params.room_id }
-      : { delete_message: "No room to delete with given id" };
+    // console.log(deletedMessage);
+    return deletedMessage.n ? { deleted_room_id: roomId } : { delete_message: "No room to delete with given id" };
   }
 };
 
-exports.signInRoom = async (req, res) => {
+exports.signInRoom = async (roomId, userId) => {
   let templateRoom = new RoomModel();
-  templateRoom = RoomModel.findOneAndUpdate(
-    { _id: req.params.room_id },
-    { $addToSet: { users: req.headers.authorization } },
-    { new: true },
-  );
+  templateRoom = RoomModel.findOneAndUpdate({ _id: roomId }, { $addToSet: { users: userId } }, { new: true });
   return templateRoom;
 };
