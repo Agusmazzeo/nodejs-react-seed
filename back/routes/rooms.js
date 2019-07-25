@@ -7,6 +7,7 @@ const { createRoom } = require("../src/room-functions");
 const { checkUserExistsById } = require("../src/user-functions");
 const { checkUserIsOwnerById } = require("../src/user-functions");
 const { signInRoom } = require("../src/room-functions");
+const { signOutRoom } = require("../src/room-functions");
 const { deleteRoom } = require("../src/room-functions");
 
 router.get("/", async (req, res) => {
@@ -27,6 +28,12 @@ router.post("/sign_in/:room_id", checkUserExistsById, async (req, res) => {
   const signedInRoom = await signInRoom(req.params.room_id, req.headers.authorization);
   console.log(signedInRoom);
   res.send(signedInRoom);
+});
+
+router.post("/sign_out/:room_id", checkUserExistsById, async (req, res) => {
+  console.log(req);
+  const signedOutRoom = await signOutRoom(req.params.room_id, req.headers.authorization);
+  res.send(signedOutRoom);
 });
 
 router.post("/delete/:room_id", checkUserIsOwnerById, async (req, res) => {

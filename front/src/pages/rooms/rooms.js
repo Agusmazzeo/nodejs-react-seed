@@ -27,7 +27,9 @@ class Rooms extends Component {
     axios
       .post(`http://localhost:3000/api/rooms/`, data.body, { headers: data.headers })
       .then(res => {
-        this.setState({ rooms: res.data.rooms });
+        let auxState = this.state;
+        auxState.rooms.push(res.data);
+        this.setState(auxState, this.signInRoom(res.data));
       })
       .catch(e => {
         console.log(e);
@@ -35,12 +37,12 @@ class Rooms extends Component {
   };
 
   signInRoom = roomToSignIn => {
+    this.props.signInUserToRoom(roomToSignIn);
     axios
       .post(`http://localhost:3000/api/rooms/sign_in/${roomToSignIn._id}`, null, {
         headers: { authorization: this.props.user._id },
       })
       .then(res => {
-        console.log(res.data);
         this.setState({ rooms: res.data.rooms });
       })
       .catch(e => {
@@ -60,7 +62,6 @@ class Rooms extends Component {
       .then(res => {
         // console.log(res);
         this.setState({ rooms: res.data });
-        console.log(this.state.rooms);
       })
       .catch(e => {
         console.log(e);

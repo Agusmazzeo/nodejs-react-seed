@@ -8,7 +8,7 @@ exports.checkExistingUsername = async (username, userEmail) => {
 };
 
 exports.checkUserExistsById = async (req, res, next) => {
-  // console.log(req);
+  console.log(req.headers);
   if (!req.headers.authorization) {
     return res.status(401).json({
       message: "Authentication required",
@@ -17,7 +17,7 @@ exports.checkUserExistsById = async (req, res, next) => {
     const user = await UserModel.findById(req.headers.authorization).catch(e => {
       console.log(e);
     });
-    // console.log(user);
+    //  console.log(user);
     if (user) {
       res.locals.auth = {
         user,

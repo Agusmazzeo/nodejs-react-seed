@@ -3,6 +3,7 @@ import Login from "./pages/login/login";
 import Home from "./pages/home/home";
 import Rooms from "./pages/rooms/rooms";
 import Users from "./pages/users/users";
+import Game from "./pages/game/game";
 import { Router, Route, Switch } from "react-router-dom";
 
 import history from "./utils/history";
@@ -16,6 +17,7 @@ class App extends React.Component {
         name: "",
         email: "",
         age: "",
+        logged_room: "",
         _id: "",
       },
     };
@@ -35,7 +37,11 @@ class App extends React.Component {
     this.setState({ user });
   };
 
-  getIntoRoom = () => {};
+  signInUserToRoom = room => {
+    let user = this.state.user;
+    user.logged_room = room._id;
+    this.setState(user);
+  };
 
   render() {
     return (
@@ -55,7 +61,13 @@ class App extends React.Component {
               )}
             />
             <Route exact path="/home" render={routeProps => <Home {...routeProps} user={this.state.user} />} />
-            <Route exact path="/rooms" render={routeProps => <Rooms {...routeProps} user={this.state.user} />} />
+            <Route
+              exact
+              path="/rooms"
+              render={routeProps => (
+                <Rooms {...routeProps} user={this.state.user} signInUserToRoom={this.signInUserToRoom} />
+              )}
+            />
             <Route exact path="/game" render={routeProps => <Game {...routeProps} user={this.state.user} />} />
             <Route exact path="/users" component={Users} />
           </Switch>

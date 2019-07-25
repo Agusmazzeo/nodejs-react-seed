@@ -71,7 +71,25 @@ exports.deleteRoom = async (roomId, userId) => {
 
 exports.signInRoom = async (roomId, userId) => {
   let templateRoom = new RoomModel();
-  console.log(roomId, userId);
   templateRoom = await RoomModel.findOneAndUpdate({ _id: roomId }, { $addToSet: { users: userId } }, { new: true });
+  return templateRoom;
+};
+
+exports.signOutRoom = async (roomId, userId) => {
+  let templateRoom = new RoomModel();
+  templateRoom = (await RoomModel.find({ _id: roomId }))[0];
+  console.log(templateRoom)
+  if (templateRoom.users.length == 1 && templateRoom.owner_id == userId) {
+    await RoomModel.deleteOne({ _id: roomId }).catch(e => {
+      return e;
+    });
+  } else if (templateRoom.users.length > 1) {
+    var index = templateRoom.users.indexOf(userId);
+    if (templateRoom.owner_id == userId) {
+      templateRoom.owner_id = templateRoom.users[index + 1];
+    }
+    templateRoom.users.split(index, 1);
+  }
+  templateRoom = await RoomModel.updateOne({ _id: roomId }, templateRoom, { new: true });
   return templateRoom;
 };
