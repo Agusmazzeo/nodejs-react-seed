@@ -7,6 +7,19 @@ class Users extends Component {
     history.push("/home");
   }
 
+  // async getUsersLogged() {
+  //   await axios
+  //     .get(`http://localhost:3000/api/users`, this.props.user)
+  //     .then(res => {
+  //       if (!res.data.error) {
+  //         this.props.history.push("/");
+  //       }
+  //     })
+  //     .catch(e => {
+  //       console.log(e);
+  //     });
+  // }
+
   render() {
     return (
       <React.Fragment>

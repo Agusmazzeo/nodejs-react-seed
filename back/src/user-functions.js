@@ -8,6 +8,7 @@ exports.checkExistingUsername = async (username, userEmail) => {
 };
 
 exports.checkUserExistsById = async (req, res, next) => {
+  // console.log(req);
   if (!req.headers.authorization) {
     return res.status(401).json({
       message: "Authentication required",

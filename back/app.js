@@ -19,6 +19,7 @@ mongoose
     console.log("Conexión realizada a base de datos!");
   })
   .catch(new Error("No fue posible realizar la conexión a la base de datos..."));
+mongoose.set("useFindAndModify", false);
 
 app.use("/api/lobby", lobbyRouter);
 app.use("/api/rooms", roomsRouter);

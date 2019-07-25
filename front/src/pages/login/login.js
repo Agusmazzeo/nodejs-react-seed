@@ -16,7 +16,7 @@ class Login extends React.Component {
       .post(`http://localhost:3000/api/lobby/`, this.props.user)
       .then(res => {
         if (!res.data.error) {
-          const user ={...this.props.user};
+          const user = { ...this.props.user };
           user._id = res.data;
           this.props.updateUser(user);
           this.props.history.push("/home");
@@ -62,7 +62,7 @@ class Login extends React.Component {
             autoComplete="off"
             required
           />
-          <button className="form button" type="submit">
+          <button className="buttonSignIn" type="submit">
             Sign In
           </button>
         </form>

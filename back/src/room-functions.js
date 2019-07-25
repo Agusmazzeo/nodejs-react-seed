@@ -71,6 +71,7 @@ exports.deleteRoom = async (roomId, userId) => {
 
 exports.signInRoom = async (roomId, userId) => {
   let templateRoom = new RoomModel();
-  templateRoom = RoomModel.findOneAndUpdate({ _id: roomId }, { $addToSet: { users: userId } }, { new: true });
+  console.log(roomId, userId);
+  templateRoom = await RoomModel.findOneAndUpdate({ _id: roomId }, { $addToSet: { users: userId } }, { new: true });
   return templateRoom;
 };

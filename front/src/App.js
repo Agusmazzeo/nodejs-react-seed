@@ -35,6 +35,8 @@ class App extends React.Component {
     this.setState({ user });
   };
 
+  getIntoRoom = () => {};
+
   render() {
     return (
       <React.Fragment>
@@ -53,7 +55,8 @@ class App extends React.Component {
               )}
             />
             <Route exact path="/home" render={routeProps => <Home {...routeProps} user={this.state.user} />} />
-            <Route exact path="/rooms" component={Rooms} />
+            <Route exact path="/rooms" render={routeProps => <Rooms {...routeProps} user={this.state.user} />} />
+            <Route exact path="/game" render={routeProps => <Game {...routeProps} user={this.state.user} />} />
             <Route exact path="/users" component={Users} />
           </Switch>
         </Router>

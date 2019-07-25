@@ -9,7 +9,7 @@ const { checkUserIsOwnerById } = require("../src/user-functions");
 const { signInRoom } = require("../src/room-functions");
 const { deleteRoom } = require("../src/room-functions");
 
-router.get("/", async (req,res) => {
+router.get("/", async (req, res) => {
   const rooms = await getAllRooms();
   res.send(rooms);
 });
@@ -25,6 +25,7 @@ router.post("/", checkUserExistsById, async (req, res) => {
 
 router.post("/sign_in/:room_id", checkUserExistsById, async (req, res) => {
   const signedInRoom = await signInRoom(req.params.room_id, req.headers.authorization);
+  console.log(signedInRoom);
   res.send(signedInRoom);
 });
 

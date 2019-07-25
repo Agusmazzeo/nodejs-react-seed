@@ -29,7 +29,6 @@ class Home extends Component {
   }
 
   render() {
-    console.log();
     return (
       <React.Fragment>
         <h1>Home</h1>
