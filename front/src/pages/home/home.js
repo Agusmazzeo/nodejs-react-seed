@@ -26,6 +26,8 @@ class Home extends Component {
       .catch(e => {
         console.log(e);
       });
+
+    localStorage.clear();
   }
 
   render() {

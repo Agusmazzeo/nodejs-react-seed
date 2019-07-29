@@ -20,20 +20,23 @@ class Rooms extends Component {
 
   createRoom = () => {
     const componentState = this.state;
-    const data = {
-      body: { room_name: componentState.newRoomName },
-      headers: { authorization: this.props.user._id },
-    };
-    axios
-      .post(`http://localhost:3000/api/rooms/`, data.body, { headers: data.headers })
-      .then(res => {
-        let auxState = this.state;
-        auxState.rooms.push(res.data);
-        this.setState(auxState, this.signInRoom(res.data));
-      })
-      .catch(e => {
-        console.log(e);
-      });
+
+    if (componentState.newRoomName) {
+      const data = {
+        body: { room_name: componentState.newRoomName },
+        headers: { authorization: this.props.user._id },
+      };
+      axios
+        .post(`http://localhost:3000/api/rooms/`, data.body, { headers: data.headers })
+        .then(res => {
+          let auxState = this.state;
+          auxState.rooms.push(res.data);
+          this.setState(auxState, this.signInRoom(res.data));
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    }
   };
 
   signInRoom = roomToSignIn => {
@@ -57,6 +60,7 @@ class Rooms extends Component {
   }
 
   componentDidMount() {
+    console.log("ACA");
     axios
       .get(`http://localhost:3000/api/rooms/`)
       .then(res => {
