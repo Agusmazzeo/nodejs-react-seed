@@ -13,7 +13,7 @@ class Game extends Component {
       numGrillas: 1,
       numFilas: 8,
       numColumnas: 8,
-      estadosPosibles: [" ", "X", "O"],
+      estadosPosibles: [0, 1, 2],
       estadosCeldas: [],
       startedGame: false,
     };
@@ -26,6 +26,7 @@ class Game extends Component {
     }
     this.setState({ estadosCeldas });
   };
+
   getArrayIndex = (fila, columna) => {
     return fila * this.state.numColumnas + columna;
   };
@@ -38,20 +39,12 @@ class Game extends Component {
 
   handleClick = (fila, columna) => {
     let arrayIndex = this.getArrayIndex(fila, columna);
-    let estadoActual = this.state.estadosCeldas[arrayIndex];
     let nuevoEstado = [...this.state.estadosCeldas];
 
-    for (let key in this.state.estadosPosibles) {
-      if (estadoActual === +key) {
-        if (this.state.estadosPosibles[+key + 1]) {
-          nuevoEstado[arrayIndex] = +key + 1;
-        } else {
-          nuevoEstado[arrayIndex] = 0;
-        }
-      }
+    if (++nuevoEstado[arrayIndex] > 2) {
+      nuevoEstado[arrayIndex] = 0;
     }
-
-    this.setState({ estadosCeldas: nuevoEstado });
+    this.setState({ estadosCeldas: nuevoEstado }, () => console.log(this.state.estadosCeldas));
   };
 
   signOutRoom = roomId => {
@@ -71,6 +64,7 @@ class Game extends Component {
 
   componentDidMount() {
     this.inicializarEstados();
+
     socket.emit("Join room", this.props.user.logged_room, this.props.user.name);
     socket.on("Joined user", joinedUser => {
       console.log(`${joinedUser} has arrived to the game!`);
@@ -98,7 +92,13 @@ class Game extends Component {
           })}
         </div>
         {startedGame ? (
-          <button onClick={() => this.setState({ startedGame: false })}>Stop Game</button>
+          <button
+            onClick={() => {
+              this.setState({ startedGame: false });
+            }}
+          >
+            Stop Game
+          </button>
         ) : (
           <button onClick={() => this.setState({ startedGame: true })}>Start Game</button>
         )}
