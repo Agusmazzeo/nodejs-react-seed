@@ -3,6 +3,7 @@ import history from "../../utils/history";
 import Grilla from "./grilla/grilla";
 import classes from "./layout/layout.module.css";
 import axios from "axios";
+import socket from "../../web-socket/webSocketHandler";
 
 class Game extends Component {
   constructor(props) {
@@ -12,12 +13,9 @@ class Game extends Component {
       numGrillas: 1,
       numFilas: 8,
       numColumnas: 8,
-      /**
-       * Para utilizar una imagen pasar directamente el tag img con la classname imagen y el
-       * src dentro de la carpeta assets y la imagen. Ejemplo:
-       */
       estadosPosibles: [" ", "X", "O"],
       estadosCeldas: [],
+      startedGame: false,
     };
   }
 
@@ -73,10 +71,16 @@ class Game extends Component {
 
   componentDidMount() {
     this.inicializarEstados();
+    socket.emit("Join room", this.props.user.logged_room, this.props.user.name);
+    socket.on("Joined user", joinedUser => {
+      console.log(`${joinedUser} has arrived to the game!`);
+    });
   }
 
   render() {
+    let { startedGame } = this.state;
     let grillas = [...Array(this.state.numGrillas)];
+
     return (
       <React.Fragment>
         <div className={classes.layout}>
@@ -93,9 +97,14 @@ class Game extends Component {
             );
           })}
         </div>
+        {startedGame ? (
+          <button onClick={() => this.setState({ startedGame: false })}>Stop Game</button>
+        ) : (
+          <button onClick={() => this.setState({ startedGame: true })}>Start Game</button>
+        )}
+
         <button
           onClick={() => {
-            // console.log(this.props.user);
             this.signOutRoom(this.props.user.logged_room);
           }}
         >

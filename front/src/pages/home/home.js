@@ -30,6 +30,11 @@ class Home extends Component {
     localStorage.clear();
   }
 
+  componentDidMount() {
+    console.log("=====================================");
+    console.log(this.props);
+  }
+
   render() {
     return (
       <React.Fragment>

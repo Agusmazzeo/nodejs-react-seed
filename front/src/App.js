@@ -28,6 +28,7 @@ class App extends React.Component {
     let name = event.target.name;
     let value = event.target.value;
     user[name] = value;
+
     this.setState({
       user,
     });
@@ -36,7 +37,6 @@ class App extends React.Component {
   updateUserWhenLoggedIn = user => {
     this.setState({ user });
     localStorage.setItem("myUser", JSON.stringify(this.state.user));
-    console.log(this.state.user);
   };
 
   signInUserToRoom = room => {
@@ -48,8 +48,10 @@ class App extends React.Component {
   componentDidMount() {
     try {
       const myUser = JSON.parse(localStorage.getItem("myUser"));
-      console.log(myUser);
-      this.setState({ user: myUser });
+
+      if (myUser) {
+        this.setState({ user: myUser });
+      }
     } catch (e) {
       console.log("Error de Localstorage:" + e);
     }

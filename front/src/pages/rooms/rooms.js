@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import history from "../../utils/history";
 import Room from "./room/room";
+// import socket from "../../web-socket/webSocketHandler";
 
 class Rooms extends Component {
   constructor(props) {
@@ -60,7 +61,6 @@ class Rooms extends Component {
   }
 
   componentDidMount() {
-    console.log("ACA");
     axios
       .get(`http://localhost:3000/api/rooms/`)
       .then(res => {
