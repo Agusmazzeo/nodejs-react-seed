@@ -15,7 +15,7 @@ router.get("/", async (req, res) => {
   res.send(rooms);
 });
 router.get("/:roomId", async (req, res) => {
-  const room = await getOneRoom(req.params.id);
+  const room = await getOneRoom(req.params.roomId);
   res.send(room);
 });
 
@@ -26,12 +26,11 @@ router.post("/", checkUserExistsById, async (req, res) => {
 
 router.post("/sign_in/:room_id", checkUserExistsById, async (req, res) => {
   const signedInRoom = await signInRoom(req.params.room_id, req.headers.authorization);
-  console.log(signedInRoom);
   res.send(signedInRoom);
 });
 
 router.post("/sign_out/:room_id", checkUserExistsById, async (req, res) => {
-  console.log(req);
+  // console.log(req);
   const signedOutRoom = await signOutRoom(req.params.room_id, req.headers.authorization);
   res.send(signedOutRoom);
 });

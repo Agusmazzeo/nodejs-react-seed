@@ -30,6 +30,7 @@ exports.createRoom = async (roomName, ownerId) => {
   let templateRoom = new RoomModel({
     name: roomName,
     owner_id: ownerId,
+    
   });
 
   if (await checkRoomExistsByName(templateRoom.name)) {
@@ -64,7 +65,7 @@ exports.deleteRoom = async (roomId, userId) => {
     const deletedMessage = await RoomModel.deleteOne({ _id: roomId }).catch(e => {
       return e;
     });
-    // console.log(deletedMessage);
+
     return deletedMessage.n ? { deleted_room_id: roomId } : { delete_message: "No room to delete with given id" };
   }
 };
@@ -78,7 +79,7 @@ exports.signInRoom = async (roomId, userId) => {
 exports.signOutRoom = async (roomId, userId) => {
   let templateRoom = new RoomModel();
   templateRoom = (await RoomModel.find({ _id: roomId }))[0];
-  console.log(roomId);
+
   if (templateRoom.users.length == 1 && templateRoom.owner_id == userId) {
     await RoomModel.deleteOne({ _id: roomId }).catch(e => {
       return e;
@@ -89,12 +90,13 @@ exports.signOutRoom = async (roomId, userId) => {
     if (templateRoom.owner_id == userId) {
       templateRoom.owner_id = templateRoom.users[index + 1];
     }
-    // console.log("=====================ANTES=======================");
-    // console.log(templateRoom.users);
+
     templateRoom.users.splice(index, 1);
-    // console.log("=====================DESPUES=======================");
-    // console.log(templateRoom.users);
   }
   templateRoom = await RoomModel.updateOne({ _id: roomId }, templateRoom, { new: true });
   return templateRoom;
+};
+
+exports.playedTurnInRoom = async room => {
+  let templateRoom = new RoomModel();
 };

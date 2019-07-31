@@ -48,12 +48,11 @@ class Rooms extends Component {
       })
       .then(res => {
         this.setState({ rooms: res.data.rooms });
+        history.push("/game");
       })
       .catch(e => {
-        console.log(e);
+        // console.log(e);
       });
-
-    history.push("/game");
   };
 
   gotoBack() {

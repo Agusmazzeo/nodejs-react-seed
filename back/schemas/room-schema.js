@@ -16,6 +16,23 @@ const RoomSchema = mongoose.Schema({
   room_limit: {
     type: Number,
   },
+  turn: {
+    type: Number,
+    default: 0,
+  },
+  game_dimensions: {
+    sideX: {
+      type: Number,
+      default: 8,
+    },
+    sideY: {
+      type: Number,
+      default: 8,
+    },
+  },
+  game_state: {
+    type: Array,
+  },
 });
 
 exports.RoomModel = mongoose.model("Room", RoomSchema);
