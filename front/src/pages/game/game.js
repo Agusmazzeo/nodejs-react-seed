@@ -16,12 +16,15 @@ class Game extends Component {
       estadosPosibles: [0, 1, 2],
       estadosCeldas: [],
       myTurn: false,
+      estadoJuego: 0, //1-playing, 2-win, 3-lost
     };
   }
 
   inicializarEstados = () => {
     let estadosCeldas = new Array(this.state.numColumnas * this.state.numFilas);
-
+    let estadoJuego = 0;
+    let estadosPosibles = [];
+    let myTurn = "";
     axios
       .get(`http://localhost:3000/api/rooms/${this.props.user.logged_room}`)
       .then(res => {
@@ -29,17 +32,22 @@ class Game extends Component {
         const numFilas = room.game_dimensions.sideY;
         const numColumnas = room.game_dimensions.sideX;
 
-        if (room.users[room.turn] == this.props.user._id) {
-          this.setState({ estadosPosibles: [0, 1], myTurn: true });
+        if (room.owner_id == this.props.user._id) {
+          estadosPosibles = [0, 1];
+          myTurn = true;
+          estadoJuego = 0;
+
+          for (let i = 0; i < estadosCeldas.length; ++i) {
+            estadosCeldas[i] = 0;
+          }
         } else {
-          this.setState({ estadosPosibles: [0, 2], myTurn: false });
+          estadosPosibles = [0, 2];
+          myTurn = false;
+          estadosCeldas = room.game_state;
+          estadoJuego = 1;
         }
 
-        for (let i = 0; i < estadosCeldas.length; ++i) {
-          estadosCeldas[i] = 0;
-        }
-
-        this.setState({ estadosCeldas, numFilas, numColumnas });
+        this.setState({ estadosCeldas, numFilas, numColumnas, estadoJuego, myTurn, estadosPosibles });
       })
       .catch(e => {
         console.log(e);
@@ -57,7 +65,7 @@ class Game extends Component {
   };
 
   handleClick = (fila, columna) => {
-    if (this.state.myTurn == true) {
+    if (this.state.myTurn == true && this.state.estadoJuego == 1) {
       let arrayIndex = this.getArrayIndex(fila, columna);
       let nuevoEstado = [...this.state.estadosCeldas];
 
@@ -66,7 +74,13 @@ class Game extends Component {
       }
 
       this.setState({ estadosCeldas: nuevoEstado, myTurn: false }, () =>
-        socket.emit("Turn played", this.props.user._id, this.props.user.logged_room, this.state.estadosCeldas,arrayIndex),
+        socket.emit(
+          "Turn played",
+          this.props.user._id,
+          this.props.user.logged_room,
+          this.state.estadosCeldas,
+          arrayIndex,
+        ),
       );
     }
   };
@@ -78,7 +92,6 @@ class Game extends Component {
         headers: { authorization: this.props.user._id },
       })
       .then(res => {
-        console.log(res);
         socket.emit("User disconnected", roomId);
         history.push("/rooms");
       })
@@ -87,43 +100,31 @@ class Game extends Component {
       });
   };
 
-  userDisconnectHandler() {
-    let estadosCeldas = new Array(this.state.numColumnas * this.state.numFilas);
-
-    axios
-      .get(`http://localhost:3000/api/rooms/${this.props.user.logged_room}`)
-      .then(res => {
-        const room = res.data[0];
-        if (room.users[room.turn] == this.props.user._id) {
-          this.setState({ myTurn: true });
-        } else {
-          this.setState({ myTurn: false });
-        }
-
-        estadosCeldas = room.game_state;
-
-        this.setState({ estadosCeldas });
-      })
-      .catch(e => {
-        console.log(e);
-      });
-  }
-
   componentDidMount() {
     this.inicializarEstados();
 
-    socket.emit("Join room", this.props.user.logged_room, this.props.user.name);
     socket.on("Joined user", joinedUser => {
+      this.setState({ estadoJuego: 1 });
       console.log(`${joinedUser} has arrived to the game!`);
+      console.log("============================");
     });
     socket.on("Turn played", (estadosCeldas, turnoUsuario) => {
-      console.log(turnoUsuario);
       let myTurn = this.props.user._id == turnoUsuario;
       this.setState({ estadosCeldas, myTurn });
     });
 
+    socket.on("Player win", userId => {
+      if (userId == this.props.user._id) {
+        this.setState({ estadoJuego: 2 });
+        console.log("GANASTE");
+      } else {
+        this.setState({ estadoJuego: 3 });
+        console.log("PERDISTE");
+      }
+    });
+
     socket.on("User disconnected", () => {
-      this.userDisconnectHandler();
+      this.inicializarEstados();
     });
   }
 
@@ -146,6 +147,7 @@ class Game extends Component {
               />
             );
           })}
+          {this.state.estadoJuego == 2 ? <h1>GANASTE</h1> : this.state.estadoJuego == 3 ? <h1>PERDISTE</h1> : null}
         </div>
         {startedGame ? (
           <button

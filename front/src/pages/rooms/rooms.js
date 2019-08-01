@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import history from "../../utils/history";
 import Room from "./room/room";
-// import socket from "../../web-socket/webSocketHandler";
+import socket from "../../web-socket/webSocketHandler";
 
 class Rooms extends Component {
   constructor(props) {
@@ -47,8 +47,11 @@ class Rooms extends Component {
         headers: { authorization: this.props.user._id },
       })
       .then(res => {
-        this.setState({ rooms: res.data.rooms });
-        history.push("/game");
+        this.setState(
+          { rooms: res.data.rooms },
+          history.push("/game"),
+          socket.emit("Join room", this.props.user.logged_room, this.props.user.name),
+        );
       })
       .catch(e => {
         // console.log(e);

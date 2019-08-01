@@ -1,7 +1,8 @@
 exports.winnerCheck = (gameState, index, numWinner, numColumnas) => {
   let linesToAnalize = [];
-  let winnerArray = "1,1,1,1";
-  console.log(index);
+  let winnerArray1 = "1,1,1,1";
+  let winnerArray2 = "2,2,2,2";
+  
   for (let i = 0; i < 4; i++) {
     for (let aux = -numWinner + 1; aux < numWinner - 1; aux++) {
       if (i == 0 && gameState[index + aux] != undefined) {
@@ -17,11 +18,10 @@ exports.winnerCheck = (gameState, index, numWinner, numColumnas) => {
         linesToAnalize.push(gameState[index + aux * numColumnas]);
       }
     }
-    if (linesToAnalize.toString().includes(winnerArray)) {
-      console.log("Anduvooooo");
+    if (linesToAnalize.toString().includes(winnerArray1) || linesToAnalize.toString().includes(winnerArray2)) {
       return true;
     }
   }
-  console.log("Anda pero no gano");
+
   return false;
 };

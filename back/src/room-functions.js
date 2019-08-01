@@ -30,7 +30,6 @@ exports.createRoom = async (roomName, ownerId) => {
   let templateRoom = new RoomModel({
     name: roomName,
     owner_id: ownerId,
-    
   });
 
   if (await checkRoomExistsByName(templateRoom.name)) {
@@ -92,6 +91,10 @@ exports.signOutRoom = async (roomId, userId) => {
     }
 
     templateRoom.users.splice(index, 1);
+    templateRoom.game_state = new Array(templateRoom.game_dimensions.sideX * templateRoom.game_dimensions.sideY);
+    for (let i = 0; i < templateRoom.game_state; ++i) {
+      templateRoom.game_state[i] = 0;
+    }//Reseteo la partida cuando un jugador sale y queda otro
   }
   templateRoom = await RoomModel.updateOne({ _id: roomId }, templateRoom, { new: true });
   return templateRoom;
