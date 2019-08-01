@@ -36,11 +36,12 @@ body {
 }
 
 .Input {
+  text-align: center;
   display: flex;
   flex-direction: row-reverse;
   align-items: center;
   border-bottom: 1px solid #58a4b0;
-  margin: 0 20px;
+  margin: auto;
 }
 .Input input {
   border: 0;
@@ -81,7 +82,7 @@ label::before {
   margin: 15px 0 5px 0;
   left: 50%;
   transform: translateX(-50%);
-  background: #58a4b0;
+  background: #323535;
   border: none;
   border-radius: 5px;
   padding: 10px;
@@ -90,6 +91,11 @@ label::before {
   font-family: "Noto Sans", sans-serif;
   font-size: 14px;
   cursor: pointer;
+}
+
+.buttonSignIn:hover {
+  background: #9fa7a7;
+  color: #504b4b;
 }
 
 .social-signin {
@@ -131,8 +137,10 @@ label::before {
 }
 
 .logo {
+  padding: 20px;
   text-align: center;
   color: white;
+  content: url(../pages/game/grilla/celda/images/leafnoiseLogo.png);
 }
 .logo i {
   display: block;

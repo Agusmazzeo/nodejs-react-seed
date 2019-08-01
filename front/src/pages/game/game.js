@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import history from "../../utils/history";
 import Grilla from "./grilla/grilla";
-import classes from "./layout/layout.module.css";
+import classes from "./layout.module.css";
 import axios from "axios";
 import socket from "../../web-socket/webSocketHandler";
+import "../../scss/style.scss";
 
 class Game extends Component {
   constructor(props) {
@@ -148,26 +149,30 @@ class Game extends Component {
             );
           })}
           {this.state.estadoJuego == 2 ? <h1>GANASTE</h1> : this.state.estadoJuego == 3 ? <h1>PERDISTE</h1> : null}
-        </div>
-        {startedGame ? (
+          {startedGame ? (
+            <button
+              className="buttonSignIn"
+              onClick={() => {
+                this.setState({ startedGame: false });
+              }}
+            >
+              Stop Game
+            </button>
+          ) : (
+            <button className="buttonSignIn" onClick={() => this.setState({ startedGame: true })}>
+              Start Game
+            </button>
+          )}
+
           <button
+            className="buttonSignIn"
             onClick={() => {
-              this.setState({ startedGame: false });
+              this.signOutRoom(this.props.user.logged_room);
             }}
           >
-            Stop Game
+            Back
           </button>
-        ) : (
-          <button onClick={() => this.setState({ startedGame: true })}>Start Game</button>
-        )}
-
-        <button
-          onClick={() => {
-            this.signOutRoom(this.props.user.logged_room);
-          }}
-        >
-          Back
-        </button>
+        </div>
       </React.Fragment>
     );
   }
