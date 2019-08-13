@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const { checkExistingUsername } = require("../src/user-functions");
 const { createUser } = require("../src/user-functions");
-const { LobbyModel } = require("../schemas/lobby-schema");
+const LobbyModel = mongoose.model("Lobby");
 
 exports.logInLobby = async userData => {
   const username = userData.name;

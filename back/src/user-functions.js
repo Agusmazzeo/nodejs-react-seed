@@ -1,4 +1,5 @@
-const { UserModel } = require("../schemas/user-schema");
+const mongoose = require("mongoose");
+const UserModel = mongoose.model("User");
 
 exports.checkExistingUsername = async (username, userEmail) => {
   const existsUser = await UserModel.find({ name: username });

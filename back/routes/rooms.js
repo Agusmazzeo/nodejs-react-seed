@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const mongoose = require("mongoose");
 const { getAllRooms } = require("../src/room-functions");
 const { getOneRoom } = require("../src/room-functions");
 const { createRoom } = require("../src/room-functions");

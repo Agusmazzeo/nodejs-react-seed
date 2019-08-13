@@ -1,4 +1,5 @@
-const { RoomModel } = require("../schemas/room-schema");
+const mongoose = require("mongoose");
+const RoomModel = mongoose.model("Room");
 
 exports.getAllRooms = async () => {
   rooms = await RoomModel.find().catch(e => {
@@ -94,7 +95,7 @@ exports.signOutRoom = async (roomId, userId) => {
     templateRoom.game_state = new Array(templateRoom.game_dimensions.sideX * templateRoom.game_dimensions.sideY);
     for (let i = 0; i < templateRoom.game_state; ++i) {
       templateRoom.game_state[i] = 0;
-    }//Reseteo la partida cuando un jugador sale y queda otro
+    } //Reseteo la partida cuando un jugador sale y queda otro
   }
   templateRoom = await RoomModel.updateOne({ _id: roomId }, templateRoom, { new: true });
   return templateRoom;
