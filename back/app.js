@@ -23,9 +23,6 @@ const roomsRouter = require("./routes/rooms");
 
 const app = express();
 /*=============Funciones de autenticación de Google====================*/
-app.use(passport.initialize());
-app.use(passport.session());
-require("./routes/authentication/passportRoutes")(app);
 
 const server = http.createServer(app);
 const PORT = process.env.PORT || 3001;
@@ -37,21 +34,27 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 mongoose
-  .connect("mongodb://mongo/game", { useNewUrlParser: true }, () => {
-    console.log("Conexión realizada a base de datos!");
-  })
+  .connect(
+    "mongodb+srv://amazzeo:Blaziken97@cluster0-wo29r.mongodb.net/test?retryWrites=true&w=majority",
+    { useNewUrlParser: true },
+    () => {
+      // .connect("mongodb://mongo/game", { useNewUrlParser: true }, () => {
+      console.log("Conexión realizada a base de datos!");
+    },
+  )
   .catch(new Error("No fue posible realizar la conexión a la base de datos..."));
 mongoose.set("useFindAndModify", false);
-
 /*===========================Cookies and Passport auth================================*/
 app.use(
   cookieSession({
-    name: "user cookie",
+    name: "user_cookie",
     maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
     keys: [keys.cookieKey], //encriptation
   }),
 );
-
+app.use(passport.initialize());
+app.use(passport.session());
+require("./routes/authentication/passportRoutes")(app);
 /*==================================Routers==========================================*/
 
 app.use("/api/lobby", lobbyRouter);

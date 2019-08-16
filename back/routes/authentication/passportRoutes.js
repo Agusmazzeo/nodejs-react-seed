@@ -9,11 +9,11 @@ module.exports = app => {
   );
 
   app.use("/api/auth/google/callback", passport.authenticate("google"), (req, res) => {
-    res.send("Hello");
+    res.send(req.user);
   });
 
   app.use("/api/current_user", (req, res) => {
-    res.send(req.user);
+    res.send(req.session);
   });
 
   app.use("/api/logout", (req, res) => {
