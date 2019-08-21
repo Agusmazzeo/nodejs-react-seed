@@ -27,7 +27,7 @@ class Game extends Component {
     let estadosPosibles = [];
     let myTurn = "";
     axios
-      .get(`http://localhost:3000/api/rooms/${this.props.user.logged_room}`)
+      .get(`/api/rooms/${this.props.user.logged_room}`)
       .then(res => {
         const room = res.data[0];
         const numFilas = room.game_dimensions.sideY;
@@ -89,7 +89,7 @@ class Game extends Component {
   signOutRoom = roomId => {
     // console.log(roomId);
     axios
-      .post(`http://localhost:3000/api/rooms/sign_out/${roomId}`, null, {
+      .post(`/api/rooms/sign_out/${roomId}`, null, {
         headers: { authorization: this.props.user._id },
       })
       .then(res => {

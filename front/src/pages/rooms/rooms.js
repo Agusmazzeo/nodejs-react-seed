@@ -28,7 +28,7 @@ class Rooms extends Component {
         headers: { authorization: this.props.user._id },
       };
       axios
-        .post(`http://localhost:3000/api/rooms/`, data.body, { headers: data.headers })
+        .post(`/api/rooms/`, data.body, { headers: data.headers })
         .then(res => {
           let auxState = this.state;
           auxState.rooms.push(res.data);
@@ -43,7 +43,7 @@ class Rooms extends Component {
   signInRoom = roomToSignIn => {
     this.props.signInUserToRoom(roomToSignIn);
     axios
-      .post(`http://localhost:3000/api/rooms/sign_in/${roomToSignIn._id}`, null, {
+      .post(`/api/rooms/sign_in/${roomToSignIn._id}`, null, {
         headers: { authorization: this.props.user._id },
       })
       .then(res => {
@@ -64,7 +64,7 @@ class Rooms extends Component {
 
   componentDidMount() {
     axios
-      .get(`http://localhost:3000/api/rooms/`)
+      .get(`/api/rooms/`)
       .then(res => {
         // console.log(res);
         this.setState({ rooms: res.data });

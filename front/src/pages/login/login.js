@@ -13,7 +13,7 @@ class Login extends React.Component {
     event.preventDefault();
     /*Consulta a back para verificar usuario*/
     await axios
-      .post(`http://localhost:3000/api/lobby/`, this.props.user)
+      .post(`/api/lobby/`, this.props.user)
       .then(res => {
         if (!res.data.error) {
           const user = { ...this.props.user };

@@ -17,7 +17,7 @@ class Home extends Component {
 
   async logOut() {
     await axios
-      .delete(`http://localhost:3000/api/lobby/log_out`, this.props.user)
+      .delete(`/api/lobby/log_out`, this.props.user)
       .then(res => {
         if (!res.data.error) {
           this.props.history.push("/");
