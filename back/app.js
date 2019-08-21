@@ -6,6 +6,7 @@ const logger = require("morgan");
 const mongoose = require("mongoose");
 const cookieSession = require("cookie-session");
 const keys = require("./config/keys");
+const cors = require("cors");
 
 const { webSocketHandler } = require("./web-socket/webSocketHandler");
 
@@ -22,12 +23,14 @@ const roomsRouter = require("./routes/rooms");
 /*===============================================================*/
 
 const app = express();
+
 /*=============Funciones de autenticación de Google====================*/
 
 const server = http.createServer(app);
 const PORT = process.env.PORT || 3001;
 const io = require("socket.io")(server).listen(PORT);
 
+app.use(cors());
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
