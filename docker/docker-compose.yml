@@ -25,15 +25,6 @@ services:
     working_dir: /app
     command: npm run start
 
-<<<<<<< HEAD
-  mongo:
-    image: mongo:4.1.13
-    restart: always
-    ports:
-      - 27017:27017
-    volumes:
-      - .data:/data/db
-=======
   # mongo:
   #   image: mongo:4.1.13
   #   restart: always
@@ -41,7 +32,13 @@ services:
   #     - 27017:27017
   #   volumes:
   #     - .data:/data/db
->>>>>>> 4fb8011fbea97c0cafcea1cdaf5a9c5c1663aab3
+  # mongo:
+  #   image: mongo:4.1.13
+  #   restart: always
+  #   ports:
+  #     - 27017:27017
+  #   volumes:
+  #     - .data:/data/db
     # environment:
     #   MONGO_INITDB_ROOT_USERNAME: root
     #   MONGO_INITDB_ROOT_PASSWORD: example
