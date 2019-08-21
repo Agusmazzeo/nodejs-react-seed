@@ -7,7 +7,7 @@ exports.webSocketHandler = io => {
 
     socket.on("Join room", (roomId, userName) => {
       socket.join(roomId);
-      console.log("======================");
+      console.log("=======================");
       socket.broadcast.to(roomId).emit("Joined user", userName);
     });
 
