@@ -65,6 +65,14 @@ class Login extends React.Component {
           <button className="buttonSignIn" type="submit">
             Sign In
           </button>
+          <button
+            className="loginBtn loginBtn--google"
+            onClick={() => {
+              window.open("localhost:3000/api/google");
+            }}
+          >
+            Google Sign In
+          </button>
         </form>
 
         <a href="#">Lost your password ?</a>

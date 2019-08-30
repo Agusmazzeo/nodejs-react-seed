@@ -8,9 +8,9 @@ const Celda = props => (
 );
 
 const renderButtonCelda = value => {
-  if (value == 1) {
+  if (value === 1) {
     return <div className={classes.redButton} />;
-  } else if (value == 2) {
+  } else if (value === 2) {
     return <div className={classes.blueButton} />;
   } else {
     return null;

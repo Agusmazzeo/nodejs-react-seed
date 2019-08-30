@@ -33,7 +33,7 @@ class Game extends Component {
         const numFilas = room.game_dimensions.sideY;
         const numColumnas = room.game_dimensions.sideX;
 
-        if (room.owner_id == this.props.user._id) {
+        if (room.owner_id === this.props.user._id) {
           estadosPosibles = [0, 1];
           myTurn = true;
           estadoJuego = 0;
@@ -66,11 +66,11 @@ class Game extends Component {
   };
 
   handleClick = (fila, columna) => {
-    if (this.state.myTurn == true && this.state.estadoJuego == 1) {
+    if (this.state.myTurn === true && this.state.estadoJuego === 1) {
       let arrayIndex = this.getArrayIndex(fila, columna);
       let nuevoEstado = [...this.state.estadosCeldas];
 
-      if (nuevoEstado[arrayIndex] == this.state.estadosPosibles[0]) {
+      if (nuevoEstado[arrayIndex] === this.state.estadosPosibles[0]) {
         nuevoEstado[arrayIndex] = this.state.estadosPosibles[1];
       }
 
@@ -110,12 +110,12 @@ class Game extends Component {
       console.log("============================");
     });
     socket.on("Turn played", (estadosCeldas, turnoUsuario) => {
-      let myTurn = this.props.user._id == turnoUsuario;
+      let myTurn = this.props.user._id === turnoUsuario;
       this.setState({ estadosCeldas, myTurn });
     });
 
     socket.on("Player win", userId => {
-      if (userId == this.props.user._id) {
+      if (userId === this.props.user._id) {
         this.setState({ estadoJuego: 2 });
         console.log("GANASTE");
       } else {
@@ -148,7 +148,7 @@ class Game extends Component {
               />
             );
           })}
-          {this.state.estadoJuego == 2 ? <h1>GANASTE</h1> : this.state.estadoJuego == 3 ? <h1>PERDISTE</h1> : null}
+          {this.state.estadoJuego === 2 ? <h1>GANASTE</h1> : this.state.estadoJuego === 3 ? <h1>PERDISTE</h1> : null}
           {startedGame ? (
             <button
               className="buttonSignIn"

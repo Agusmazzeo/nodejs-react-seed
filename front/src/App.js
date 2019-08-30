@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import Login from "./pages/login/login";
 import Home from "./pages/home/home";
 import Rooms from "./pages/rooms/rooms";
@@ -66,7 +66,7 @@ class App extends React.Component {
               exact
               path="/"
               render={routeProps => (
-                <Login
+                <Login 
                   {...routeProps}
                   handleChange={this.handleLoginInputChange}
                   updateUser={this.updateUserWhenLoggedIn}
