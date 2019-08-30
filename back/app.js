@@ -36,11 +36,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 mongoose
-  // .connect(
-  //   "mongodb+srv://amazzeo:Blaziken97@cluster0-wo29r.mongodb.net/test?retryWrites=true&w=majority",
-  //   { useNewUrlParser: true },
-  //   () => {
-      .connect("mongodb://mongo/game", { useNewUrlParser: true }, () => {
+  .connect(
+    "mongodb+srv://amazzeo:Blaziken97@cluster0-wo29r.mongodb.net/test?retryWrites=true&w=majority",
+    { useNewUrlParser: true },
+    () => {
+      // .connect("mongodb://mongo/game", { useNewUrlParser: true }, () => {
       console.log("Conexión realizada a base de datos!");
     },
   )
