@@ -36,14 +36,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 mongoose
-  .connect(
-    "mongodb+srv://amazzeo:Blaziken97@cluster0-wo29r.mongodb.net/test?retryWrites=true&w=majority",
-    { useNewUrlParser: true },
-    () => {
-      // .connect("mongodb://mongo/game", { useNewUrlParser: true }, () => {
-      console.log("Conexión realizada a base de datos!");
-    },
-  )
+  // .connect(
+  //   "mongodb+srv://amazzeo:Blaziken97@cluster0-wo29r.mongodb.net/test?retryWrites=true&w=majority",
+  //   { useNewUrlParser: true },
+  //   () => {
+  .connect("mongodb://mongo/game", { useNewUrlParser: true }, () => {
+    console.log("Conexión realizada a base de datos!");
+  })
   .catch(new Error("No fue posible realizar la conexión a la base de datos..."));
 mongoose.set("useFindAndModify", false);
 /*===========================Cookies and Passport auth================================*/
